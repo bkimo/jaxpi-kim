@@ -24,7 +24,7 @@ pip==25.1.1
 platformdirs==4.3.8
 opt_einsum==3.4.0
 pickleshare==0.7.5
-setuptools==75.8.2
+setuptools==78.1.1
 markdown-it-py==3.0.0
 GitPython==3.1.44
 networkx==3.4.2
