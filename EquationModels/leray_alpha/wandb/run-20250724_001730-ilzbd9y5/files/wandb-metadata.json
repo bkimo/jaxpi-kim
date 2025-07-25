@@ -1,0 +1,44 @@
+{
+  "os":  "macOS-15.5-arm64-arm-64bit",
+  "python":  "CPython 3.10.18",
+  "startedAt":  "2025-07-23T15:17:30.697620Z",
+  "program":  "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/main.py",
+  "codePath":  "examples/ns_alpha/main.py",
+  "git":  {
+    "remote":  "https://github.com/bkimo/jaxpi",
+    "commit":  "f7a54f67c55f254787255040bb72050fed29b2db"
+  },
+  "email":  "bkimo2003@gmail.com",
+  "root":  "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha",
+  "host":  "BK-MBP.local",
+  "executable":  "/Users/bkim/miniconda3/envs/jaxmps/bin/python",
+  "codePathLocal":  "main.py",
+  "cpu_count":  16,
+  "cpu_count_logical":  16,
+  "disk":  {
+    "/":  {
+      "total":  "994662584320",
+      "used":  "263001227264"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "994662584320",
+      "used":  "263001227264"
+    }
+  },
+  "memory":  {
+    "total":  "68719476736"
+  },
+  "cpu":  {
+    "count":  16,
+    "countLogical":  16
+  },
+  "apple":  {
+    "name":  "Apple M4 Max",
+    "ecpuCores":  4,
+    "pcpuCores":  12,
+    "gpuCores":  40,
+    "memoryGb":  64,
+    "swapTotalBytes":  "1073741824",
+    "ramTotalBytes":  "68719476736"
+  }
+}

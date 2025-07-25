@@ -1,0 +1,18 @@
+I0724 00:14:44.138668 8351751936 train.py:232] Training time window 1
+Waiting for JIT...
+Traceback (most recent call last):
+  File "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/main.py", line 47, in <module>
+    app.run(main)
+  File "/Users/bkim/miniconda3/envs/jaxmps/lib/python3.10/site-packages/absl/app.py", line 316, in run
+    _run_main(main, args)
+  File "/Users/bkim/miniconda3/envs/jaxmps/lib/python3.10/site-packages/absl/app.py", line 261, in _run_main
+    sys.exit(main(argv))
+  File "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/main.py", line 39, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/train.py", line 288, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+  File "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/train.py", line 139, in train_one_window
+    log_dict = evaluator(state, batch)
+  File "/Users/bkim/Dropbox/Research/Codes/jaxpinn/examples/ns_alpha/models.py", line 488, in __call__
+    self.log_errors(state.params, coords, u_ref, v_ref)
+AttributeError: 'LerayAlpha2DEvaluator' object has no attribute 'log_errors'

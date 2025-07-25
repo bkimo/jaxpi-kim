@@ -1,0 +1,7 @@
+{"time":"2025-06-25T17:43:58.303005213+04:00","level":"INFO","msg":"stream: starting","core version":"0.19.7.dev1","symlink path":"/home/kim/Dropbox/Codes/jaxpinn/examples/ns_alpha/wandb/run-20250625_174358-5s6lpg5p/logs/debug-core.log"}
+{"time":"2025-06-25T17:43:58.518888385+04:00","level":"INFO","msg":"created new stream","id":"5s6lpg5p"}
+{"time":"2025-06-25T17:43:58.51893339+04:00","level":"INFO","msg":"stream: started","id":"5s6lpg5p"}
+{"time":"2025-06-25T17:43:58.51895486+04:00","level":"INFO","msg":"handler: started","stream_id":"5s6lpg5p"}
+{"time":"2025-06-25T17:43:58.51895483+04:00","level":"INFO","msg":"writer: Do: started","stream_id":"5s6lpg5p"}
+{"time":"2025-06-25T17:43:58.518978605+04:00","level":"INFO","msg":"sender: started","stream_id":"5s6lpg5p"}
+{"time":"2025-06-25T17:43:58.904010362+04:00","level":"INFO","msg":"Starting system monitor"}
