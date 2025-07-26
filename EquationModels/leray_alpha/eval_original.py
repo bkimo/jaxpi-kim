@@ -85,31 +85,30 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
 
-    # Around line 91 in eval.py
     # Predict
-    # Define prediction functions that are JIT-compiled and vectorized over SPACE only.
-    # We will loop over time manually to save memory.
-    u_pred_fn = jit(vmap(model.u_net, in_axes=(None, None, 0, 0)))
-    v_pred_fn = jit(vmap(model.v_net, in_axes=(None, None, 0, 0)))
-    p_pred_fn = jit(vmap(model.p_net, in_axes=(None, None, 0, 0)))
-    w_pred_fn = jit(vmap(model.w_net, in_axes=(None, None, 0, 0)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0)), (None, 0, None, None)))
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0)), (None, 0, None, None)))
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0)), (None, 0, None, None)))
+    # For the original unsteady example, there was a w_net for vorticity. 
+    # Note that it's not directly part of the Leray-alpha PDE.
+    w_pred_fn = jit(vmap(vmap(model.w_net, (None, None, 0, 0)), (None, 0, None, None)))
 
     # Create time steps for evaluation and plotting
     t_coords = jnp.linspace(0, t1, 100)  # More time points for better resolution
 
-    # Initialize lists to store concatenated results across ALL time windows
-    u_pred_all_windows = []
-    v_pred_all_windows = []
-    p_pred_all_windows = []
-    w_pred_all_windows = []
-    C_D_all_windows = []
-    C_L_all_windows = []
-    p_diff_all_windows = []
+    u_pred_list = []
+    v_pred_list = []
+    p_pred_list = []
+    w_pred_list = []
+    C_D_list = []
+    C_L_list = []
+    p_diff_list = []
 
     # Collect predictions from each time window
     for idx in range(config.training.num_time_windows):
         # Restore the checkpoint for the current time window
         current_ckpt_path = os.path.abspath(os.path.join(workdir, config.wandb.name, "ckpt", f"time_window_{idx + 1}"))
+        # Check if the directory exists before restoring
         if not os.path.isdir(current_ckpt_path):
             logging.warning(f"Checkpoint directory not found: {current_ckpt_path}. Skipping this time window.")
             continue
@@ -117,52 +116,32 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, current_ckpt_path)
         params = model.state.params
 
-        # Initialize lists to store predictions for the CURRENT time window
-        u_pred_list = []
-        v_pred_list = []
-        p_pred_list = []
-        w_pred_list = []
+        # Predict for the current time window
+        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+        w_pred = w_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
 
-        # Manually loop over each time step to perform predictions in batches
-        print(f"Evaluating time window {idx + 1}... Processing {len(t_coords)} time steps.")
-        for t in t_coords:
-            u_pred_t = u_pred_fn(params, t, coords[:, 0], coords[:, 1])
-            v_pred_t = v_pred_fn(params, t, coords[:, 0], coords[:, 1])
-            w_pred_t = w_pred_fn(params, t, coords[:, 0], coords[:, 1])
-            p_pred_t = p_pred_fn(params, t, coords[:, 0], coords[:, 1])
-
-            u_pred_list.append(u_pred_t)
-            v_pred_list.append(v_pred_t)
-            w_pred_list.append(w_pred_t)
-            p_pred_list.append(p_pred_t)
-        
-        # Stack the results for the current time window
-        u_pred = jnp.stack(u_pred_list, axis=0)
-        v_pred = jnp.stack(v_pred_list, axis=0)
-        w_pred = jnp.stack(w_pred_list, axis=0)
-        p_pred = jnp.stack(p_pred_list, axis=0)
-
-        # Compute drag, lift, and pressure drop for all time steps at once (this is less memory intensive)
+        # Compute drag, lift, and pressure drop for each time step
         C_D, C_L, p_diff = model.compute_drag_lift(params, t_coords, U_star, L_star)
 
-        # Append results of the current window to the main lists
-        u_pred_all_windows.append(u_pred)
-        v_pred_all_windows.append(v_pred)
-        w_pred_all_windows.append(w_pred)
-        p_pred_all_windows.append(p_pred)
-        C_D_all_windows.append(C_D)
-        C_L_all_windows.append(C_L)
-        p_diff_all_windows.append(p_diff)
+        u_pred_list.append(u_pred)
+        v_pred_list.append(v_pred)
+        w_pred_list.append(w_pred)
+        p_pred_list.append(p_pred)
+        C_D_list.append(C_D)
+        C_L_list.append(C_L)
+        p_diff_list.append(p_diff)
 
     # Concatenate results from all time windows
-    u_pred = jnp.concatenate(u_pred_all_windows, axis=0)
-    v_pred = jnp.concatenate(v_pred_all_windows, axis=0)
-    p_pred = jnp.concatenate(p_pred_all_windows, axis=0)
-    w_pred = jnp.concatenate(w_pred_all_windows, axis=0)
-    C_D = jnp.concatenate(C_D_all_windows, axis=0)
-    C_L = jnp.concatenate(C_L_all_windows, axis=0)
-    p_diff = jnp.concatenate(p_diff_all_windows, axis=0)
-    
+    u_pred = jnp.concatenate(u_pred_list, axis=0)
+    v_pred = jnp.concatenate(v_pred_list, axis=0)
+    p_pred = jnp.concatenate(p_pred_list, axis=0)
+    w_pred = jnp.concatenate(w_pred_list, axis=0)
+    C_D = jnp.concatenate(C_D_list, axis=0)
+    C_L = jnp.concatenate(C_L_list, axis=0)
+    p_diff = jnp.concatenate(p_diff_list, axis=0)
+
     # Compute L2 errors for the final time step
     u_error = jnp.sqrt(jnp.mean((u_ref[-1] - u_pred[-1]) ** 2)) / jnp.sqrt(jnp.mean(u_ref[-1]**2))
     v_error = jnp.sqrt(jnp.mean((v_ref[-1] - v_pred[-1]) ** 2)) / jnp.sqrt(jnp.mean(v_ref[-1]**2))
