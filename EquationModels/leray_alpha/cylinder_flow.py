@@ -508,7 +508,9 @@ class LerayAlpha2DEvaluator(BaseEvaluator):
             self.log_errors(state.params, coords, u_ref, v_ref)
         
         if self.config.logging.log_preds and coords is not None:
-            self.log_preds(state.params, coords)
+            x_star = coords[:, 0]
+            y_star = coords[:, 1]
+            self.log_preds(state.params, x_star, y_star)
 
         return self.log_dict
 

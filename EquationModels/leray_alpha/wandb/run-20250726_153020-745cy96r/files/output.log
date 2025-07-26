@@ -1,0 +1,56 @@
+I0726 15:30:22.381455 8351751936 train.py:232] Training time window 1
+Waiting for JIT...
+[15:30:53 - main - INFO] -----------------------------
+[15:30:53 - main - INFO] Iter:   0      Time: 30.141
+[15:30:53 - main - INFO] -------------  --------------
+[15:30:53 - main - INFO] p_ic_loss      1.959e-01
+[15:30:53 - main - INFO] rc_loss        6.837e-02
+[15:30:53 - main - INFO] ru_loss        5.535e-01
+[15:30:53 - main - INFO] rv_loss        6.473e-01
+[15:30:53 - main - INFO] u_ic_loss      3.186e-01
+[15:30:53 - main - INFO] u_in_loss      1.594e-01
+[15:30:53 - main - INFO] u_noslip_loss  5.063e-01
+[15:30:53 - main - INFO] u_out_loss     1.792e-01
+[15:30:53 - main - INFO] v_ic_loss      2.166e-01
+[15:30:53 - main - INFO] v_in_loss      1.556e-01
+[15:30:53 - main - INFO] v_noslip_loss  1.094e-01
+[15:30:53 - main - INFO] v_out_loss     3.858e-02
+[15:30:53 - main - INFO] u_error        6.042e-01
+[15:30:53 - main - INFO] v_error        2.294e+00
+[15:31:44 - main - INFO] -----------------------------
+[15:31:44 - main - INFO] Iter: 100      Time: 51.414
+[15:31:44 - main - INFO] -------------  --------------
+[15:31:44 - main - INFO] p_ic_loss      8.549e-03
+[15:31:44 - main - INFO] rc_loss        1.678e-02
+[15:31:44 - main - INFO] ru_loss        7.980e-02
+[15:31:44 - main - INFO] rv_loss        6.416e-02
+[15:31:44 - main - INFO] u_ic_loss      3.150e-02
+[15:31:44 - main - INFO] u_in_loss      1.842e-03
+[15:31:44 - main - INFO] u_noslip_loss  6.674e-03
+[15:31:44 - main - INFO] u_out_loss     5.981e-04
+[15:31:44 - main - INFO] v_ic_loss      4.522e-02
+[15:31:44 - main - INFO] v_in_loss      1.185e-03
+[15:31:44 - main - INFO] v_noslip_loss  2.252e-03
+[15:31:44 - main - INFO] v_out_loss     4.452e-04
+[15:31:44 - main - INFO] u_error        3.054e-01
+[15:31:44 - main - INFO] v_error        1.114e+00
+I0726 15:32:30.734022 8351751936 checkpoints.py:571] Saving checkpoint at step: 200
+I0726 15:32:30.734840 8351751936 checkpoints.py:659] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0726 15:32:30.735657 8351751936 abstract_checkpointer.py:35] orbax-checkpoint version: 0.11.16
+I0726 15:32:30.736545 8351751936 checkpointer.py:241] [process=0] Started saving checkpoint to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.
+I0726 15:32:30.739975 8351751936 atomicity.py:159] Creating tmp directory /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0
+I0726 15:32:30.740777 8351751936 checkpoint.py:184] Wrote Metadata={'item_handlers': None, 'metrics': {}, 'performance_metrics': {}, 'init_timestamp_nsecs': 1753511550740422000, 'commit_timestamp_nsecs': None, 'custom_metadata': {}}, json={"item_handlers": null, "metrics": {}, "performance_metrics": {}, "init_timestamp_nsecs": 1753511550740422000, "commit_timestamp_nsecs": null, "custom_metadata": {}} to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0/_CHECKPOINT_METADATA
+I0726 15:32:30.743242 8351751936 signaling_client.py:373] Using ThreadSafeKeyValueSignalingClient
+I0726 15:32:30.743454 8351751936 base_pytree_checkpoint_handler.py:137] [process=0][thread=MainThread] Initiated "orbax.checkpoint._src.serialization.type_handlers.NumpyHandler".serialize. Time taken: 0.000529s
+I0726 15:32:30.744838 8351751936 base_pytree_checkpoint_handler.py:116] [process=0] /jax/checkpoint/write/blocking_bytes_per_sec: 1.0 GiB/s (total bytes: 3.4 MiB) (time elapsed: 3 milliseconds) (per-host)
+I0726 15:32:30.748738 8351751936 base_pytree_checkpoint_handler.py:568] [process=0][thread=MainThread] Initiated Pytree async_save. Time taken: 0.007258s (batch_requests_ready=0.001401s, total_serialization_initiated=0.001830s, others=0.004027s)
+I0726 15:32:30.765939 18040451072 array_metadata_store.py:243] [process=0][thread=write_metadata_after_commits] No metadata found for process_index=0, checkpoint_dir=/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0. If the checkpoint does not contain jax.Array then it is expected. If checkpoint contains jax.Array then it should lead to an error eventually; if no error is raised then it is a bug.
+I0726 15:32:30.767695 18040451072 base_pytree_checkpoint_handler.py:968] [process=0][thread=write_metadata_after_commits] Commit + Array metadata written. Time taken: 0.019077s (commit=0.017149s, array_metadata_write=0.001928s)
+I0726 15:32:30.768258 8351751936 base_pytree_checkpoint_handler.py:116] [process=0] /jax/checkpoint/write/bytes_per_sec: 127.9 MiB/s (total bytes: 3.4 MiB) (time elapsed: 26 milliseconds) (per-host)
+I0726 15:32:30.768821 8351751936 checkpoint.py:224] Read Metadata={'item_handlers': None, 'metrics': {}, 'performance_metrics': {}, 'init_timestamp_nsecs': 1753511550740422000, 'commit_timestamp_nsecs': None, 'custom_metadata': {}} from /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0/_CHECKPOINT_METADATA
+I0726 15:32:30.769063 8351751936 checkpoint.py:243] Updated Metadata={'item_handlers': 'orbax.checkpoint._src.handlers.pytree_checkpoint_handler.PyTreeCheckpointHandler', 'metrics': {}, 'performance_metrics': {}, 'init_timestamp_nsecs': 1753511550740422000, 'commit_timestamp_nsecs': None, 'custom_metadata': {}} to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0/_CHECKPOINT_METADATA
+I0726 15:32:30.769734 8351751936 array_metadata_store.py:279] [process=0][thread=MainThread] No metadata found for any process_index, checkpoint_dir=/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0. Time taken: 0.000063s. If the checkpoint does not contain jax.Array then it is expected. If checkpoint contains jax.Array then it should lead to an error eventually; if no error is raised then it is a bug.
+I0726 15:32:30.771569 8351751936 base_pytree_checkpoint_handler.py:1086] [process=0][thread=MainThread] Pytree save finalize (merge_ocdbt + ArrayMetadata validation) completed. Time taken: 0.002354s. use_zarr3=False, enable_post_merge_validation=True, directory=/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0
+I0726 15:32:30.771998 8351751936 atomicity.py:304] Renaming /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.orbax-checkpoint-tmp-0 to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200
+I0726 15:32:30.772507 8351751936 atomicity.py:609] [process=0][thread=MainThread] Finished saving checkpoint (finalized tmp dir) to `/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200`.
+I0726 15:32:30.772577 8351751936 checkpointer.py:288] Finished synchronous save in 0.04 seconds to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200
