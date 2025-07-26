@@ -488,8 +488,12 @@ class LerayAlpha2DEvaluator(BaseEvaluator):
         self.log_dict["v_error"] = v_error
 
     def log_preds(self, params, x_star, y_star):
-        u_pred = vmap(vmap(self.model.u_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
-        v_pred = vmap(vmap(self.model.v_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
+        # For time-dependent models, we need to specify a time point
+        # Using the final time from temporal domain for prediction
+        t_eval = self.model.temporal_dom[1]
+        
+        u_pred = vmap(vmap(self.model.u_net, (None, None, 0, 0)), (None, 0, None, None))(params, t_eval, x_star, y_star)
+        v_pred = vmap(vmap(self.model.v_net, (None, None, 0, 0)), (None, 0, None, None))(params, t_eval, x_star, y_star)
         U_pred = jnp.sqrt(u_pred ** 2 + v_pred ** 2)
     
         fig = plt.figure()
