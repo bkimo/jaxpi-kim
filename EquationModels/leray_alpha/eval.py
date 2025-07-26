@@ -106,32 +106,58 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Collect predictions from each time window
     for idx in range(config.training.num_time_windows):
-        # Restore the checkpoint for the current time window
-        current_ckpt_path = os.path.abspath(os.path.join(workdir, config.wandb.name, "ckpt", f"time_window_{idx + 1}"))
-        # Check if the directory exists before restoring
-        if not os.path.isdir(current_ckpt_path):
-            logging.warning(f"Checkpoint directory not found: {current_ckpt_path}. Skipping this time window.")
+        # Try multiple possible checkpoint paths
+        possible_paths = [
+            os.path.abspath(os.path.join(workdir, config.wandb.name, "ckpt", f"time_window_{idx + 1}")),
+            os.path.abspath(os.path.join(workdir, "ckpt", f"time_window_{idx + 1}")),
+            os.path.abspath(os.path.join(workdir, "default", "ckpt", f"time_window_{idx + 1}")),
+            os.path.abspath(os.path.join(workdir, config.wandb.name, "ckpt")),  # Single checkpoint case
+            os.path.abspath(os.path.join(workdir, "ckpt")),  # Single checkpoint case
+            os.path.abspath(os.path.join(workdir, "default", "ckpt"))  # Single checkpoint case
+        ]
+        
+        current_ckpt_path = None
+        for path in possible_paths:
+            if os.path.isdir(path):
+                current_ckpt_path = path
+                break
+        
+        # Check if any valid directory was found
+        if current_ckpt_path is None:
+            logging.warning(f"No checkpoint directory found for time window {idx + 1}. Tried paths: {possible_paths}")
             continue
 
-        model.state = restore_checkpoint(model.state, current_ckpt_path)
-        params = model.state.params
+        try:
+            model.state = restore_checkpoint(model.state, current_ckpt_path)
+            params = model.state.params
 
-        # Predict for the current time window
-        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        w_pred = w_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+            # Predict for the current time window
+            u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+            v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+            w_pred = w_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+            p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
 
-        # Compute drag, lift, and pressure drop for each time step
-        C_D, C_L, p_diff = model.compute_drag_lift(params, t_coords, U_star, L_star)
+            # Compute drag, lift, and pressure drop for each time step
+            C_D, C_L, p_diff = model.compute_drag_lift(params, t_coords, U_star, L_star)
 
-        u_pred_list.append(u_pred)
-        v_pred_list.append(v_pred)
-        w_pred_list.append(w_pred)
-        p_pred_list.append(p_pred)
-        C_D_list.append(C_D)
-        C_L_list.append(C_L)
-        p_diff_list.append(p_diff)
+            u_pred_list.append(u_pred)
+            v_pred_list.append(v_pred)
+            w_pred_list.append(w_pred)
+            p_pred_list.append(p_pred)
+            C_D_list.append(C_D)
+            C_L_list.append(C_L)
+            p_diff_list.append(p_diff)
+            
+            logging.info(f"Successfully loaded checkpoint from: {current_ckpt_path}")
+            
+        except Exception as e:
+            logging.error(f"Failed to load checkpoint from {current_ckpt_path}: {e}")
+            continue
+
+    # Check if any predictions were collected before concatenation
+    if len(u_pred_list) == 0:
+        raise ValueError(f"No valid checkpoints found! Please check that checkpoints exist in the expected directories. "
+                        f"Looked for checkpoints with num_time_windows={config.training.num_time_windows} in workdir='{workdir}'")
 
     # Concatenate results from all time windows
     u_pred = jnp.concatenate(u_pred_list, axis=0)
