@@ -6,6 +6,7 @@ from jax import lax, jit, grad, vmap
 from jax.tree_util import tree_map
 
 import optax
+import matplotlib.pyplot as plt
 
 from jaxpi import archs
 from jaxpi.models import ForwardBVP, ForwardIVP
@@ -384,6 +385,20 @@ class LerayAlpha2D(ForwardIVP):
         return u_x, v_x, u_y, v_y
 
     @partial(jit, static_argnums=(0,))
+    def compute_l2_error(self, params, coords, u_test, v_test):
+        # For Leray-alpha, we need to specify a time point for evaluation
+        # Using the final time from temporal domain
+        t_eval = self.temporal_dom[1]
+        
+        u_pred = vmap(self.u_net, (None, None, 0, 0))(params, t_eval, coords[:, 0], coords[:, 1])
+        v_pred = vmap(self.v_net, (None, None, 0, 0))(params, t_eval, coords[:, 0], coords[:, 1])
+
+        u_error = jnp.linalg.norm(u_pred - u_test) / jnp.linalg.norm(u_test)
+        v_error = jnp.linalg.norm(v_pred - v_test) / jnp.linalg.norm(v_test)
+
+        return u_error, v_error
+
+    @partial(jit, static_argnums=(0,))
     def compute_drag_lift(self, params, t, U_star, L_star):
         nu = 0.001  # Dimensional viscosity
         radius = 0.05  # radius of cylinder
@@ -467,28 +482,33 @@ class LerayAlpha2DEvaluator(BaseEvaluator):
     def __init__(self, config, model):
         super().__init__(config, model)
 
+    def log_errors(self, params, coords, u_ref, v_ref):
+        u_error, v_error = self.model.compute_l2_error(params, coords, u_ref, v_ref)
+        self.log_dict["u_error"] = u_error
+        self.log_dict["v_error"] = v_error
+
     def log_preds(self, params, x_star, y_star):
-        u_pred = vmap(vmap(model.u_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
-        v_pred = vmap(vmap(model.v_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
+        u_pred = vmap(vmap(self.model.u_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
+        v_pred = vmap(vmap(self.model.v_net, (None, None, 0)), (None, 0, None))(params, x_star, y_star)
         U_pred = jnp.sqrt(u_pred ** 2 + v_pred ** 2)
     
         fig = plt.figure()
         plt.pcolor(U_pred.T, cmap='jet')
-        log_dict['U_pred'] = fig
+        self.log_dict['U_pred'] = fig
         fig.close()
 
-    def __call__(self, state, batch):
+    def __call__(self, state, batch, coords=None, u_ref=None, v_ref=None):
         self.log_dict = super().__call__(state, batch)
 
         if self.config.weighting.use_causal:
             _, _, _, causal_weight = self.model.res_and_w(state.params, batch["res"])
             self.log_dict["cas_weight"] = causal_weight.min()
 
-        #if self.config.logging.log_errors:
-        #    self.log_errors(state.params, coords, u_ref, v_ref)
+        if self.config.logging.log_errors and coords is not None and u_ref is not None and v_ref is not None:
+            self.log_errors(state.params, coords, u_ref, v_ref)
         
-        #if self.config.logging.log_preds:
-        #    self.log_preds(state.params, coords)
+        if self.config.logging.log_preds and coords is not None:
+            self.log_preds(state.params, coords)
 
         return self.log_dict
 

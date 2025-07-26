@@ -105,7 +105,7 @@ class ResSampler(BaseSampler):
         return batch
 
 
-def train_one_window(config, workdir, model, samplers, idx):
+def train_one_window(config, workdir, model, samplers, idx, coords=None, u_ref=None, v_ref=None):
     # Initialize evaluator
     evaluator = cylinder_flow.LerayAlpha2DEvaluator(config, model)
 
@@ -136,7 +136,7 @@ def train_one_window(config, workdir, model, samplers, idx):
                 # Get the first replica of the state and batch
                 state = jax.device_get(tree_map(lambda x: x[0], model.state))
                 batch = jax.device_get(tree_map(lambda x: x[0], batch))
-                log_dict = evaluator(state, batch)
+                log_dict = evaluator(state, batch, coords, u_ref, v_ref)
                 wandb.log(log_dict, step + step_offset)
 
                 end_time = time.time()
@@ -285,7 +285,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         model = cylinder_flow.LerayAlpha2D(config, inflow_fn, temporal_dom, coords, Re, alpha=config.alpha)
 
         # Train model for the current time window
-        model = train_one_window(config, workdir, model, samplers, idx)
+        model = train_one_window(config, workdir, model, samplers, idx, coords, u_ref, v_ref)
 
         # Update the initial condition for the next time window
         if config.training.num_time_windows > 1:
