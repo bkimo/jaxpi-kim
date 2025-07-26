@@ -492,8 +492,9 @@ class LerayAlpha2DEvaluator(BaseEvaluator):
         # Using the final time from temporal domain for prediction
         t_eval = self.model.temporal_dom[1]
         
-        u_pred = vmap(vmap(self.model.u_net, (None, None, 0, 0)), (None, 0, None, None))(params, t_eval, x_star, y_star)
-        v_pred = vmap(vmap(self.model.v_net, (None, None, 0, 0)), (None, 0, None, None))(params, t_eval, x_star, y_star)
+        # Vectorize over spatial coordinates only, keeping time as scalar
+        u_pred = vmap(vmap(self.model.u_net, (None, None, 0, 0)), (None, None, None, None))(params, t_eval, x_star, y_star)
+        v_pred = vmap(vmap(self.model.v_net, (None, None, 0, 0)), (None, None, None, None))(params, t_eval, x_star, y_star)
         U_pred = jnp.sqrt(u_pred ** 2 + v_pred ** 2)
     
         fig = plt.figure()
