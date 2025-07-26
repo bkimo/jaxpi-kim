@@ -96,7 +96,7 @@ rich==14.0.0
 smmap==5.0.2
 fonttools==4.58.4
 importlib_metadata==8.7.0
-protobuf==5.28.3
+protobuf==5.29.5
 hpack==4.1.0
 ml_dtypes==0.5.1
 zipp==3.23.0
