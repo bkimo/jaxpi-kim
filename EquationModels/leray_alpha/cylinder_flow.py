@@ -487,20 +487,31 @@ class LerayAlpha2DEvaluator(BaseEvaluator):
         self.log_dict["u_error"] = u_error
         self.log_dict["v_error"] = v_error
 
+    # Around line 492 in cylinder_flow.py
+
     def log_preds(self, params, x_star, y_star):
         # For time-dependent models, we need to specify a time point
         # Using the final time from temporal domain for prediction
         t_eval = self.model.temporal_dom[1]
+
+        # Define a function that maps over spatial coordinates for a single time
+        u_pred_fn = vmap(self.model.u_net, in_axes=(None, None, 0, 0))
+        v_pred_fn = vmap(self.model.v_net, in_axes=(None, None, 0, 0))
+
+        # Call the vectorized function
+        u_pred = u_pred_fn(params, t_eval, x_star, y_star)
+        v_pred = v_pred_fn(params, t_eval, x_star, y_star)
+        U_pred = jnp.sqrt(u_pred**2 + v_pred**2)
+
+        # NOTE: The plotting part below will likely fail next, as `coords`
+        # is unstructured, but `pcolor` requires a structured grid.
+        # It's better to handle complex plotting in `eval.py`.
+        # For now, we'll comment it out to prevent another crash.
         
-        # Vectorize over spatial coordinates only, keeping time as scalar
-        u_pred = vmap(vmap(self.model.u_net, (None, None, 0, 0)), (None, None, None, None))(params, t_eval, x_star, y_star)
-        v_pred = vmap(vmap(self.model.v_net, (None, None, 0, 0)), (None, None, None, None))(params, t_eval, x_star, y_star)
-        U_pred = jnp.sqrt(u_pred ** 2 + v_pred ** 2)
-    
-        fig = plt.figure()
-        plt.pcolor(U_pred.T, cmap='jet')
-        self.log_dict['U_pred'] = fig
-        fig.close()
+        # fig = plt.figure()
+        # plt.pcolor(U_pred.T, cmap='jet') # This line requires U_pred to be on a grid
+        # self.log_dict['U_pred'] = fig
+        # fig.close()
 
     def __call__(self, state, batch, coords=None, u_ref=None, v_ref=None):
         self.log_dict = super().__call__(state, batch)

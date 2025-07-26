@@ -1,0 +1,15 @@
+{"time":"2025-07-26T16:29:03.828751+09:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/wandb/run-20250726_162903-jyb7s039/logs/debug-core.log"}
+{"time":"2025-07-26T16:29:04.155501+09:00","level":"INFO","msg":"stream: created new stream","id":"jyb7s039"}
+{"time":"2025-07-26T16:29:04.155532+09:00","level":"INFO","msg":"stream: started","id":"jyb7s039"}
+{"time":"2025-07-26T16:29:04.15554+09:00","level":"INFO","msg":"writer: Do: started","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:29:04.155551+09:00","level":"INFO","msg":"sender: started","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:29:04.155538+09:00","level":"INFO","msg":"handler: started","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:29:04.461991+09:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-07-26T16:31:10.921228+09:00","level":"INFO","msg":"stream: closing","id":"jyb7s039"}
+{"time":"2025-07-26T16:31:10.921396+09:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-07-26T16:31:10.921519+09:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-07-26T16:31:11.522201+09:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-07-26T16:31:11.994692+09:00","level":"INFO","msg":"handler: closed","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:31:11.994808+09:00","level":"INFO","msg":"sender: closed","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:31:11.994783+09:00","level":"INFO","msg":"writer: Close: closed","stream_id":"jyb7s039"}
+{"time":"2025-07-26T16:31:11.995478+09:00","level":"INFO","msg":"stream: closed","id":"jyb7s039"}

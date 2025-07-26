@@ -1,0 +1,62 @@
+I0726 16:29:04.621519 8351751936 train.py:232] Training time window 1
+Waiting for JIT...
+[16:29:34 - main - INFO] -----------------------------
+[16:29:34 - main - INFO] Iter:   0      Time: 28.770
+[16:29:34 - main - INFO] -------------  --------------
+[16:29:34 - main - INFO] p_ic_loss      1.959e-01
+[16:29:34 - main - INFO] rc_loss        6.837e-02
+[16:29:34 - main - INFO] ru_loss        5.535e-01
+[16:29:34 - main - INFO] rv_loss        6.473e-01
+[16:29:34 - main - INFO] u_ic_loss      3.186e-01
+[16:29:34 - main - INFO] u_in_loss      1.594e-01
+[16:29:34 - main - INFO] u_noslip_loss  5.063e-01
+[16:29:34 - main - INFO] u_out_loss     1.792e-01
+[16:29:34 - main - INFO] v_ic_loss      2.166e-01
+[16:29:34 - main - INFO] v_in_loss      1.556e-01
+[16:29:34 - main - INFO] v_noslip_loss  1.094e-01
+[16:29:34 - main - INFO] v_out_loss     3.858e-02
+[16:29:34 - main - INFO] u_error        6.042e-01
+[16:29:34 - main - INFO] v_error        2.294e+00
+[16:30:24 - main - INFO] -----------------------------
+[16:30:24 - main - INFO] Iter: 100      Time: 50.229
+[16:30:24 - main - INFO] -------------  --------------
+[16:30:24 - main - INFO] p_ic_loss      8.549e-03
+[16:30:24 - main - INFO] rc_loss        1.678e-02
+[16:30:24 - main - INFO] ru_loss        7.980e-02
+[16:30:24 - main - INFO] rv_loss        6.416e-02
+[16:30:24 - main - INFO] u_ic_loss      3.150e-02
+[16:30:24 - main - INFO] u_in_loss      1.842e-03
+[16:30:24 - main - INFO] u_noslip_loss  6.674e-03
+[16:30:24 - main - INFO] u_out_loss     5.981e-04
+[16:30:24 - main - INFO] v_ic_loss      4.522e-02
+[16:30:24 - main - INFO] v_in_loss      1.185e-03
+[16:30:24 - main - INFO] v_noslip_loss  2.252e-03
+[16:30:24 - main - INFO] v_out_loss     4.452e-04
+[16:30:24 - main - INFO] u_error        3.054e-01
+[16:30:24 - main - INFO] v_error        1.114e+00
+I0726 16:31:10.378747 8351751936 checkpoints.py:571] Saving checkpoint at step: 200
+I0726 16:31:10.379039 8351751936 checkpoints.py:659] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0726 16:31:10.379157 8351751936 abstract_checkpointer.py:35] orbax-checkpoint version: 0.11.16
+I0726 16:31:10.379328 8351751936 checkpointer.py:241] [process=0] Started saving checkpoint to /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200.
+Traceback (most recent call last):
+  File "/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/main.py", line 47, in <module>
+    app.run(main)
+  File "/Users/bkim/miniconda3/envs/jaxcpu/lib/python3.12/site-packages/absl/app.py", line 316, in run
+    _run_main(main, args)
+  File "/Users/bkim/miniconda3/envs/jaxcpu/lib/python3.12/site-packages/absl/app.py", line 261, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/main.py", line 39, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/train.py", line 288, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx, coords, u_ref, v_ref)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/train.py", line 153, in train_one_window
+    save_checkpoint(model.state, ckpt_path, keep=config.saving.num_keep_ckpts)
+  File "/Users/bkim/Codes/jaxpi-kim/jaxpi/utils.py", line 44, in save_checkpoint
+    checkpoints.save_checkpoint(workdir, state, step=step, keep=keep)
+  File "/Users/bkim/miniconda3/envs/jaxcpu/lib/python3.12/site-packages/flax/training/checkpoints.py", line 693, in save_checkpoint
+    orbax_checkpointer.save(
+  File "/Users/bkim/miniconda3/envs/jaxcpu/lib/python3.12/site-packages/orbax/checkpoint/_src/checkpointers/checkpointer.py", line 254, in save
+    raise ValueError(f'Destination {directory} already exists.')
+ValueError: Destination /Users/bkim/Codes/jaxpi-kim/EquationModels/leray_alpha/test1/ckpt/time_window_1/checkpoint_200 already exists.
