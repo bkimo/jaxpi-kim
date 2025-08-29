@@ -142,7 +142,7 @@ pydantic_core==2.27.1
 pydantic==2.10.3
 tensorboard==2.18.0
 tensorflow-probability==0.25.0
-torch==2.4.1
+torch==2.8.0
 tensorflow==2.18.0
 wandb==0.19.7.dev1
 jaxpi==0.0.1
