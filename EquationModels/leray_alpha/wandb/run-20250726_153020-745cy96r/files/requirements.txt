@@ -52,7 +52,7 @@ sympy==1.14.0
 zstandard==0.23.0
 cached-property==1.5.2
 torchvision-extra-decoders==0.0.2
-Werkzeug==3.1.3
+Werkzeug==3.1.4
 numpy==2.3.0
 dm-tree==0.1.9
 namex==0.1.0
