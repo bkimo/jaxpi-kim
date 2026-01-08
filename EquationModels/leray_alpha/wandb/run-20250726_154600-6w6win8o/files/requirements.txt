@@ -6,7 +6,7 @@ munkres==1.1.4
 grpcio==1.67.1
 idna==3.10
 typing_extensions==4.14.0
-urllib3==2.5.0
+urllib3==2.6.3
 nest-asyncio==1.6.0
 kiwisolver==1.4.8
 tensorflow_estimator==2.15.0
