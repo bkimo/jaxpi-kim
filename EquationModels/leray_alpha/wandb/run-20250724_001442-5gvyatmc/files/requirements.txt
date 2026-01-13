@@ -77,7 +77,7 @@ cycler==0.12.1
 Jinja2==3.1.6
 wheel==0.45.1
 tornado==6.5.1
-filelock==3.18.0
+filelock==3.20.3
 torchaudio==2.7.1
 comm==0.2.2
 pure_eval==0.2.3
