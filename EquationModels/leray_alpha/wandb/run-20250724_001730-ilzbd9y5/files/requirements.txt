@@ -12,7 +12,7 @@ numpy==2.2.6
 nest_asyncio==1.6.0
 debugpy==1.8.14
 ptyprocess==0.7.0
-torch==2.7.0
+torch==2.7.1
 pybind11==2.13.6
 protobuf==6.31.1
 typing-inspection==0.4.1
