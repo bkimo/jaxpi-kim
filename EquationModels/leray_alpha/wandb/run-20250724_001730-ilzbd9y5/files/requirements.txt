@@ -71,7 +71,7 @@ unicodedata2==16.0.0
 toolz==1.0.0
 click==8.2.1
 packaging==25.0
-urllib3==2.4.0
+urllib3==2.5.0
 sentry-sdk==2.30.0
 cycler==0.12.1
 Jinja2==3.1.6
