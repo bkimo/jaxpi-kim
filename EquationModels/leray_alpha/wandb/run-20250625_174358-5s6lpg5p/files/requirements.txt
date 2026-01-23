@@ -136,7 +136,7 @@ annotated-types==0.6.0
 cloudpickle==3.0.0
 dm-tree==0.1.7
 eval_type_backport==0.2.2
-protobuf==5.28.3
+protobuf==7.34.0rc1
 grpcio==1.67.1
 pydantic_core==2.27.1
 pydantic==2.10.3
