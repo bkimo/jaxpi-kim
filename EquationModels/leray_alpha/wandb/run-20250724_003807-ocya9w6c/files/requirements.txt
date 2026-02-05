@@ -14,7 +14,7 @@ debugpy==1.8.14
 ptyprocess==0.7.0
 torch==2.7.0
 pybind11==2.13.6
-protobuf==6.31.1
+protobuf==6.33.5
 typing-inspection==0.4.1
 pillow==11.2.1
 parso==0.8.4
