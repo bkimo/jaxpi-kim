@@ -14,7 +14,7 @@ flatbuffers==25.2.10
 jaxlib==0.6.2
 pybind11==2.13.6
 typing-inspection==0.4.1
-pillow==11.2.1
+pillow==12.1.1
 tensorstore==0.1.75
 jaxpi==0.0.1
 astunparse==1.6.3
